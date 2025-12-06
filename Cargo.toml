@@ -1,0 +1,7 @@
+[package]
+name = "fitgirl-inno-parsing"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+inno = { git = "https://github.com/mokurin000/inno/", branch = "feat/vistor-for-RunEntry" }
