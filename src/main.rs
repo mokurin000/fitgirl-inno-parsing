@@ -1,12 +1,21 @@
-use std::{error::Error, fs::OpenOptions};
+use std::{
+    error::Error,
+    fs::{OpenOptions, read_dir},
+    path::Path,
+};
 
 fn main() -> Result<(), Box<dyn Send + Sync + Error>> {
-    let inno = inno::Inno::new(
-        OpenOptions::new()
-            .read(true)
-            .create(false)
-            .open("payload/setup.exe")?,
-    )?;
+    for payload in read_dir("./payload")?.flatten() {
+        let path = payload.path();
+        println!("parsing {path:?}...");
+        _ = parse_file(path);
+        println!("------");
+    }
+    Ok(())
+}
+
+fn parse_file(file: impl AsRef<Path>) -> Result<(), Box<dyn Send + Sync + Error>> {
+    let inno = inno::Inno::new(OpenOptions::new().read(true).create(false).open(file)?)?;
 
     let icon = inno
         .icons()
